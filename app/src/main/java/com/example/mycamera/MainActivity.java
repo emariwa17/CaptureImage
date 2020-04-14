@@ -12,16 +12,16 @@ import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ImageView ImageView;
+    private ImageView imageView;
     private Button viewImageBtn;
-    private static final int requestImageCapture = 0;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ImageView = findViewById(R.id.viewImage);
+        imageView = findViewById(R.id.viewImage);
         viewImageBtn = findViewById(R.id.viewImageBtn);
     }
 
@@ -30,21 +30,20 @@ public class MainActivity extends AppCompatActivity {
         Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         if(takePicture.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePicture, requestImageCapture);
+            startActivityForResult(takePicture, REQUEST_IMAGE_CAPTURE);
         }
 
     }
 
     @Override
-    protected void onActivityResult (int required, int result, Intent data) {
-        super.onActivityResult(required, result, data);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (result == requestImageCapture && result == RESULT_OK ) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-//            Bundle bundle = data.getExtras();
-
-            Bitmap ImageBitmap = (Bitmap) data.getExtras().get("ImageData");
-            ImageView.setImageBitmap(ImageBitmap);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageView.setImageBitmap(imageBitmap);
         }
     }
 }
